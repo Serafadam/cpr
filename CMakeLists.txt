@@ -5,12 +5,7 @@ if(POLICY CMP0048)
     cmake_policy(SET CMP0048 NEW)
 endif()
 
-include(cmake/HunterGate.cmake)
-HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.154.tar.gz"
-    SHA1 "f86a59e0cf169e2d9f765f63708c25628b288c12"
-    LOCAL
-)
+include(cmake/vcpkg.cmake)
 
 # Allow use of project folders for IDEs like Visual Studio, so we
 # could organize projects into relevant folders: "cpr", "tests" & "external (libraries)".
@@ -81,15 +76,10 @@ if(BUILD_CPR_TESTS)
     enable_testing()
 endif()
 
-if(HUNTER_ENABLED)
-    hunter_add_package(CURL)
-    find_package(CURL CONFIG REQUIRED)
-    if(BUILD_CPR_TESTS)
-        hunter_add_package(GTest)
-        find_package(GTest CONFIG REQUIRED)
-        hunter_add_package(mongoose)
-        find_package(mongoose CONFIG REQUIRED)
-    endif()
+ find_package(CURL CONFIG REQUIRED)
+if(BUILD_CPR_TESTS)
+    find_package(GTest CONFIG REQUIRED)
+    find_package(mongoose CONFIG REQUIRED)
 endif()
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
